@@ -23,7 +23,11 @@ generate:
 # CLIENT COMMANDS - Run with: make <target>
 # =============================================================================
 
-BASE_URL ?= http://localhost:8090
+# Base URL for the API
+BASE_URL ?= http://localhost:8080
+# Base URL for the docker tests
+# BASE_URL ?= http://localhost:8090
+
 # JQ is a command-line JSON processor.
 JQ ?= jq
 

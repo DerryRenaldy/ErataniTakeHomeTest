@@ -57,6 +57,4 @@ func main() {
 	fmt.Println("Sorted numbers: ", sortedNumbers)
 	fmt.Println()
 	fmt.Println("Algorithm used: QuickSort")
-	fmt.Println("Time Complexity: O(n log n) average, O(n^2) worst case")
-	fmt.Println("Space Complexity: O(log n)")
 }
