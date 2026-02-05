@@ -1,0 +1,32 @@
+# Dependencies
+vendor/
+go.sum
+
+# Build artifacts
+bin/
+tmp/
+*.exe
+*.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test files
+*_test.go
+coverage.out
+
+# Local development files
+.env
+.env.local
+.env.*.local

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: testcase3-postgres
+    environment:
+      POSTGRES_DB: sandbox
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sandbox"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - ./seed-data:/seed-data:ro
+    networks:
+      - testcase3-network
+    restart: unless-stopped
+
+  migrate:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgres://postgres:@postgres:5432/sandbox?sslmode=disable"
+    command: dbmate -d ./migrations up
+    networks:
+      - testcase3-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: testcase3-app
+    env_file:
+      - .env.docker
+    environment:
+      - DB_PG_READ_HOST=${DB_PG_READ_HOST:-postgres}
+      - DB_PG_READ_PORT=${DB_PG_READ_PORT:-5432}
+      - DB_PG_READ_USER=${DB_PG_READ_USER:-postgres}
+      - DB_PG_READ_NAME=${DB_PG_READ_NAME:-sandbox}
+      - DB_PG_WRITE_HOST=${DB_PG_WRITE_HOST:-postgres}
+      - DB_PG_WRITE_PORT=${DB_PG_WRITE_PORT:-5432}
+      - DB_PG_WRITE_USER=${DB_PG_WRITE_USER:-postgres}
+      - DB_PG_WRITE_NAME=${DB_PG_WRITE_NAME:-sandbox}
+    ports:
+      - "8090:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - testcase3-network
+    restart: unless-stopped
+
+networks:
+  testcase3-network:
+    driver: bridge
