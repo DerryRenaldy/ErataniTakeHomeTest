@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	model "eratani_assesment_test/TestCase_3/internal/domain/credit_card/model"
 	"eratani_assesment_test/TestCase_3/transport/http/response"
@@ -21,9 +22,10 @@ func (h *CreditCardHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 func (h *CreditCardHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	var userID int
-	if _, err := json.Marshal(id); err == nil {
-		json.Unmarshal([]byte(id), &userID)
+	userID, err := strconv.Atoi(id)
+	if err != nil {
+		response.WithMessage(w, http.StatusBadRequest, "invalid user id")
+		return
 	}
 
 	user, err := h.UserService.GetUserByID(userID)

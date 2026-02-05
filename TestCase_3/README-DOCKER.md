@@ -92,8 +92,6 @@ TestCase_3/
 ├── seed-data/           # CSV files for seeding
 │   ├── users.csv
 │   └── user_transactions.csv
-├── scripts/
-│   └── docker-entrypoint.sh  # App startup script
 ├── Dockerfile           # Multi-stage Docker build
 ├── docker-compose.yml   # Service orchestration (3 services)
 ├── .env.docker          # Docker environment configuration
@@ -125,11 +123,11 @@ Dbmate will automatically run them on next deployment.
 
 Migration file format:
 ```sql
--- +dbmate Up
+-- migrate:up
 
 CREATE TABLE ...;
 
--- +dbmate Down
+-- migrate:down
 
 DROP TABLE ...;
 ```
