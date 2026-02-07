@@ -3,7 +3,6 @@ package database
 import (
 	"eratani_assesment_test/TestCase_3/configs"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -70,12 +69,10 @@ func CreatePostgresDBConnection(connType, username, password, host, port, dbName
 			sslmode)
 	}
 
-	log.Printf("Connecting to Postgres database (%s): host=%s, port=%s, dbName=%s\n", connType, host, port, dbName)
 	db, err := sqlx.Connect("postgres", connStr)
 	if err != nil {
 		panic(fmt.Sprintf("Failed connecting to Postgres database (%s): %s", connType, err))
 	}
-	fmt.Printf("Connected to Postgres database (%s): host=%s, port=%s, dbName=%s\n", connType, host, port, dbName)
 
 	db.SetConnMaxLifetime(maxConnLifetime)
 	db.SetMaxIdleConns(maxIdleConn)
